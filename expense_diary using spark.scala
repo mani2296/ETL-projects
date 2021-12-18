@@ -1,3 +1,14 @@
+/*
+same expense_diary project but here i am using spark to process and ingest data to hdfs from database rather than sqoop and hive which was used in earlier
+project. Here i am using hive as a metastore for spark sql.
+In this small project user can add day to day expense and it will inserted into database. The user can query the list of expenses he made. 
+There is another one important feature where user can know per day what is the overall amount he had spent. For this i will be using spark  
+to read data from database and do aggregation on per day basis and export the result back to database which can be queried by user. 
+This is like an end to end ETL process. you can schdule the job so that this ETL process will run for fixed interval of time
+
+*/
+
+
 package org.test.spark
 import org.apache.spark.sql._
 import scala.util.control.Breaks._
