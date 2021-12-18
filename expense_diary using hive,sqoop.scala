@@ -1,6 +1,8 @@
-/*
-
-
+/* DESCRIPTION
+In this small project user can add day to day expense and it will inserted into mysql database. The user can query the list of expenses he made. 
+There is another one important feature where user can know per day what is the overall amount he had spent. For this i will be using sqoop to import the data into hdfs and 
+using hive i can do aggregation on per day basis and export the result back to mysql database using sqoop which can be queried by user. 
+This is like an end to end ETL process. you can schdule the job so that this ETL process will run for fixed interval of time
 
 */
 package com.org.excercise
@@ -77,8 +79,12 @@ class diary()
 }
 
 //sqoop import to hdfs
-/* sqoop job --create expense_job -- import --connect jdbc:mysql://localhost/tempdb --username root --password Root123$ --table tblexpense 
---target-dir /user/hduser/tblexpense_stg --incremental append --check-column id --last-value 0 -m1 --driver com.mysql.cj.jdbc.Driver */
+/* 
+
+sqoop job --create expense_job -- import --connect jdbc:mysql://localhost/tempdb --username root --password Root123$ --table tblexpense 
+--target-dir /user/hduser/tblexpense_stg --incremental append --check-column id --last-value 0 -m1 --driver com.mysql.cj.jdbc.Driver
+
+*/
 
 //processing in hive
 /*
