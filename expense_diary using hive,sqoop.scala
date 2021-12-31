@@ -1,3 +1,10 @@
+/* DESCRIPTION
+In this small project user can add day to day expense and it will inserted into mysql database. The user can query the list of expenses he made. 
+There is another one important feature where user can know per day what is the overall amount he had spent. For this i will be using sqoop to import the data into hdfs and 
+using hive i can do aggregation on per day basis and export the result back to mysql database using sqoop which can be queried by user. 
+This is like an end to end ETL process. you can schdule the job so that this ETL process will run for fixed interval of time
+
+*/
 package com.org.excercise
 import scala.io.StdIn._
 import java.sql.Connection
@@ -70,3 +77,31 @@ class diary()
       
     }
 }
+
+//sqoop import to hdfs
+/* 
+
+sqoop job --create expense_job -- import --connect jdbc:mysql://localhost/tempdb --username root --password Root123$ --table tblexpense 
+--target-dir /user/hduser/tblexpense_stg --incremental append --check-column id --last-value 0 -m1 --driver com.mysql.cj.jdbc.Driver
+
+*/
+
+//processing in hive
+/*
+create external table tblexpense_raw(id int,expense_item string,expense_amount int,expense_date timestamp) row format delimited fields terminated by ',' 
+location '/user/hduser/tblexpense_stg';
+
+create external table exp_summary(expense_date date,total_amount int) row format delimited fields terminated ',' location /user/hduser/exp_summary;
+
+insert overwrite table exp_summary select e.exp_date,sum(expense_amount) from (select from_unixtime(unix_timestamp(expense_date,'yyyy-MM-dd HH:mm:ss'),'yyyy-MM-dd') as exp_date,
+expense_amount from tblexpense_raw)e group by e.exp_date;
+
+*/
+
+//sqoop export
+
+/*
+sqoop job --create expense_export -- export --connect jdbc:mysql://localhost/tempdb --username root --password Root123$ --table expense_summary \
+--export-dir /user/hduser/exp_summary -m1
+*/
+
