@@ -34,7 +34,7 @@ object expense_diary {
         println("Hi, press 1 for expense read,2 for expense insert, 3 for expense report and 4 to exit")
         val driver="com.mysql.cj.jdbc.Driver"
         val user="root"
-        val password="Root123$"
+        val password="Root"
         val url="jdbc:mysql://localhost/tempdb"
         val tablename="tblexpense"
         val number=readInt()
