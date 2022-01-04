@@ -69,7 +69,7 @@ if __name__=="__main__":
     kafka_final_df=cleaned_df.selectExpr("custid as key","to_json(struct(*)) as value")
     
     kafka_write=kafka_final_df.writeStream.format("kafka").option("kafka.bootstrap.servers","localhost:9092") \
-                .option("topic","outputstream").outputMode("update").trigger(processingTime='10 seconds') \
+                .option("topic","outputstream").outputMode("update").trigger(processingTime='20 seconds') \
                 .option("checkpointLocation","/home/hduser/checkpoint_kafka").option("queryName","clickstream_data").start()
     
     kafka_write.awaitTermination()
