@@ -9,8 +9,8 @@ from pyspark.sql.functions import *
 """
 Description:
 In this json data from source is transfered using nifi to kafka. From kafka topic clickstream data is then read and cleaned using spark.
-The records from kafka will be in binary format key value pairs so we used casting and applied from_json function to give proper structure and applied 
-various transformations. Finally again transfered the curated data back to new kafka topic outputstream. Here we used trigger time as 20 seconds so
+The records from kafka will be in binary format key value pairs so  used casting and applied from_json function to give proper structure and applied 
+various transformations. Finally again transfered the curated data back to new kafka topic outputstream. Here trigger time is set 20 seconds so
 for each 20 seconds it will acculate data to form a micro batch process it and then write to kafka topic. Again to write to kafka topic data should in key value pair.
 """
 if __name__=="__main__":
