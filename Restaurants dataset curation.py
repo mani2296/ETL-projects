@@ -1,12 +1,76 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-"""This dataset is provided by yelp which publish crowd-sourced reviews about businesses. u can get this dataset from kaggle 
+"""
+This dataset is provided by yelp which publish crowd-sourced reviews about businesses. u can get this dataset from kaggle 
 {"business_id":"6iYb2HFDywm3zjuRg0shjw","name":"Oskar Blues Taproom","address":"921 Pearl St","city":"Boulder","state":"CO","postal_code":"80302","latitude":40.0175444,"longitude":-105.2833481,"stars":4.0,"review_count":86,"is_open":1,"attributes":{"RestaurantsTableService":"True","WiFi":"u'free'","BikeParking":"True","BusinessParking":"{'garage': False, 'street': True, 'validated': False, 'lot': False, 'valet': False}","BusinessAcceptsCreditCards":"True","RestaurantsReservations":"False","WheelchairAccessible":"True","Caters":"True","OutdoorSeating":"True","RestaurantsGoodForGroups":"True","HappyHour":"True","BusinessAcceptsBitcoin":"False","RestaurantsPriceRange2":"2","Ambience":"{'touristy': False, 'hipster': False, 'romantic': False, 'divey': False, 'intimate': False, 'trendy': False, 'upscale': False, 'classy': False, 'casual': True}","HasTV":"True","Alcohol":"'beer_and_wine'","GoodForMeal":"{'dessert': False, 'latenight': False, 'lunch': False, 'dinner': False, 'brunch': False, 'breakfast': False}","DogsAllowed":"False","RestaurantsTakeOut":"True","NoiseLevel":"u'average'","RestaurantsAttire":"'casual'","RestaurantsDelivery":"None"},"categories":"Gastropubs, Food, Beer Gardens, Restaurants, Bars, American (Traditional), Beer Bar, Nightlife, Breweries","hours":{"Monday":"11:0-23:0","Tuesday":"11:0-23:0","Wednesday":"11:0-23:0","Thursday":"11:0-23:0","Friday":"11:0-23:0","Saturday":"11:0-23:0","Sunday":"11:0-23:0"}}
 {"business_id":"tCbdrRPZA0oiIYSmHG3J0w","name":"Flying Elephants at PDX","address":"7000 NE Airport Way","city":"Portland","state":"OR","postal_code":"97218","latitude":45.5889058992,"longitude":-122.5933307507,"stars":4.0,"review_count":126,"is_open":1,"attributes":{"RestaurantsTakeOut":"True","RestaurantsAttire":"u'casual'","GoodForKids":"True","BikeParking":"False","OutdoorSeating":"False","Ambience":"{'romantic': False, 'intimate': False, 'touristy': False, 'hipster': False, 'divey': False, 'classy': False, 'trendy': False, 'upscale': False, 'casual': True}","Caters":"True","RestaurantsReservations":"False","RestaurantsDelivery":"False","HasTV":"False","RestaurantsGoodForGroups":"False","BusinessAcceptsCreditCards":"True","NoiseLevel":"u'average'","ByAppointmentOnly":"False","RestaurantsPriceRange2":"2","WiFi":"u'free'","BusinessParking":"{'garage': True, 'street': False, 'validated': False, 'lot': False, 'valet': False}","Alcohol":"u'beer_and_wine'","GoodForMeal":"{'dessert': False, 'latenight': False, 'lunch': True, 'dinner': False, 'brunch': False, 'breakfast': True}"},"categories":"Salad, Soup, Sandwiches, Delis, Restaurants, Cafes, Vegetarian","hours":{"Monday":"5:0-18:0","Tuesday":"5:0-17:0","Wednesday":"5:0-18:0","Thursday":"5:0-18:0","Friday":"5:0-18:0","Saturday":"5:0-18:0","Sunday":"5:0-18:0"}}
 
-In this dataset is cleaned and filered based on the required fields and found out highest rated restaurent in the location based on certain conditions 
+In this dataset is cleaned and filered based on the required fields and found out highest rated restaurant in the location based on certain conditions 
+schema:
+root
+ |-- address: string (nullable = true)
+ |-- attributes: struct (nullable = true)
+ |    |-- AcceptsInsurance: string (nullable = true)
+ |    |-- AgesAllowed: string (nullable = true)
+ |    |-- Alcohol: string (nullable = true)
+ |    |-- Ambience: string (nullable = true)
+ |    |-- BYOB: string (nullable = true)
+ |    |-- BYOBCorkage: string (nullable = true)
+ |    |-- BestNights: string (nullable = true)
+ |    |-- BikeParking: string (nullable = true)
+ |    |-- BusinessAcceptsBitcoin: string (nullable = true)
+ |    |-- BusinessAcceptsCreditCards: string (nullable = true)
+ |    |-- BusinessParking: string (nullable = true)
+ |    |-- ByAppointmentOnly: string (nullable = true)
+ |    |-- Caters: string (nullable = true)
+ |    |-- CoatCheck: string (nullable = true)
+ |    |-- Corkage: string (nullable = true)
+ |    |-- DietaryRestrictions: string (nullable = true)
+ |    |-- DogsAllowed: string (nullable = true)
+ |    |-- DriveThru: string (nullable = true)
+ |    |-- GoodForDancing: string (nullable = true)
+ |    |-- GoodForKids: string (nullable = true)
+ |    |-- GoodForMeal: string (nullable = true)
+ |    |-- HairSpecializesIn: string (nullable = true)
+ |    |-- HappyHour: string (nullable = true)
+ |    |-- HasTV: string (nullable = true)
+ |    |-- Music: string (nullable = true)
+ |    |-- NoiseLevel: string (nullable = true)
+ |    |-- Open24Hours: string (nullable = true)
+ |    |-- OutdoorSeating: string (nullable = true)
+ |    |-- RestaurantsAttire: string (nullable = true)
+ |    |-- RestaurantsCounterService: string (nullable = true)
+ |    |-- RestaurantsDelivery: string (nullable = true)
+ |    |-- RestaurantsGoodForGroups: string (nullable = true)
+ |    |-- RestaurantsPriceRange2: string (nullable = true)
+ |    |-- RestaurantsReservations: string (nullable = true)
+ |    |-- RestaurantsTableService: string (nullable = true)
+ |    |-- RestaurantsTakeOut: string (nullable = true)
+ |    |-- Smoking: string (nullable = true)
+ |    |-- WheelchairAccessible: string (nullable = true)
+ |    |-- WiFi: string (nullable = true)
+ |-- business_id: string (nullable = true)
+ |-- categories: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- hours: struct (nullable = true)
+ |    |-- Friday: string (nullable = true)
+ |    |-- Monday: string (nullable = true)
+ |    |-- Saturday: string (nullable = true)
+ |    |-- Sunday: string (nullable = true)
+ |    |-- Thursday: string (nullable = true)
+ |    |-- Tuesday: string (nullable = true)
+ |    |-- Wednesday: string (nullable = true)
+ |-- is_open: long (nullable = true)
+ |-- latitude: double (nullable = true)
+ |-- longitude: double (nullable = true)
+ |-- name: string (nullable = true)
+ |-- postal_code: string (nullable = true)
+ |-- review_count: long (nullable = true)
+ |-- stars: double (nullable = true)
+ |-- state: string (nullable = true)
 """
+
 
 spark=SparkSession.builder.master("local[*]").appName("yelp dataset").getOrCreate()
 
@@ -18,7 +82,7 @@ from pyspark.sql.functions import expr, col
 cleaned_df=df.select("name","attributes.Alcohol","attributes.BusinessAcceptsCreditCards","attributes.GoodForDancing",
          "attributes.BikeParking","attributes.OutdoorSeating","attributes.ByAppointmentOnly",
          "attributes.RestaurantsDelivery",
-        expr("named_struct('address',address,'latitude',latitude,'longitude',longitude,'state',state,'city',city,'postal_code',postal_code) as address"),
+          expr("named_struct('address',address,'latitude',latitude,'longitude',longitude,'state',state,'city',city,'postal_code',postal_code) as address"),
          "business_id",expr("split(categories,',') as categories"),"is_open","hours.*","review_count","stars")
 cleaned_df.show(20,False)
 
